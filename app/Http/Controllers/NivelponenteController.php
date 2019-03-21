@@ -4,82 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Nivelponente;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NivelponenteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $nivelesponentes = Nivelponente::all();
+        return $this->showAll($nivelesponentes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:nivelesponentes,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $nivelesponentes = new Nivelponente([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $nivelesponentes->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Nivelponente $Nivelponente)
     {
-        //
+        $nivelesponentes = Nivelponente::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $nivelesponentes->nombre = $request->nombre;
+        $nivelesponentes->save();
+
+        return $this->successResponse($nivelesponentes,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Nivelponente  $nivelponente
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Nivelponente $nivelponente)
+   
+    public function destroy(Request $request,Nivelponente $Nivelponente)
     {
-        //
-    }
+        $nivelesponentes = Nivelponente::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Nivelponente  $nivelponente
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Nivelponente $nivelponente)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Nivelponente  $nivelponente
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Nivelponente $nivelponente)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Nivelponente  $nivelponente
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Nivelponente $nivelponente)
-    {
-        //
+        $nivelesponentes->delete();
+        return $this->successResponse($nivelesponentes,200);
     }
 }

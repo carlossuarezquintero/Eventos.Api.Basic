@@ -74,6 +74,16 @@ Route::group(['prefix' => 'ponent'], function () {
         Route::post('ponentescreate', 'AreaponenteController@create');
         Route::PUT('ponentesupdate', 'AreaponenteController@update');
         Route::DELETE('ponentesdelete', 'AreaponenteController@destroy');
+
+        Route::get('niveles', 'NivelponenteController@index');
+        Route::post('nivelescreate', 'NivelponenteController@create');
+        Route::PUT('nivelesupdate', 'NivelponenteController@update');
+        Route::DELETE('nivelesdelete', 'NivelponenteController@destroy');
+
+        Route::get('categorias', 'CategoriaponenteController@index');
+        Route::post('categoriascreate', 'CategoriaponenteController@create');
+        Route::PUT('categoriasupdate', 'CategoriaponenteController@update');
+        Route::DELETE('categoriasdelete', 'CategoriaponenteController@destroy');
       
     });
 });
