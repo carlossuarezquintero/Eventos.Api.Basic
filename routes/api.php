@@ -79,6 +79,18 @@ Route::group(['prefix' => 'title'], function () {
 });
 
 
+Route::group(['prefix' => 'status'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('estados', 'StatuController@index');
+        Route::post('estadoscreate', 'StatuController@create');
+        Route::PUT('estadosupdate', 'StatuController@update');
+        Route::DELETE('estadosdelete', 'StatuController@destroy');
+      
+    });
+});
+
+
 
 Route::group([    
     'namespace' => 'Auth',    

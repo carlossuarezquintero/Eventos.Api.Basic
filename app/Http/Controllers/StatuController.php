@@ -7,79 +7,50 @@ use Illuminate\Http\Request;
 
 class StatuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $estados = Statu::all();
+        return $this->showAll($estados);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:status,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $estados = new Statu([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $estados->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Statu  $statu
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Statu $statu)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Statu  $statu
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Statu $statu)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Statu  $statu
-     * @return \Illuminate\Http\Response
-     */
+  
+  
     public function update(Request $request, Statu $statu)
     {
-        //
+        $estados = Statu::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $estados->nombre = $request->nombre;
+        $estados->save();
+
+        return $this->successResponse($estados,200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Statu  $statu
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Statu $statu)
+    public function destroy(Request $request,Statu $statu)
     {
-        //
+        $estados = Statu::findOrFail($request->id);
+
+        $estados->delete();
+        return $this->successResponse($estados,200);
     }
 }

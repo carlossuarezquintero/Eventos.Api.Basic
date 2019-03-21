@@ -22,7 +22,7 @@ class TituloController extends Controller
     public function create(Request $request)
     {
         $reglas = [
-            'nombre' =>'required|unique:tipostelefonos,nombre'
+            'nombre' =>'required|unique:titulos,nombre'
         ];
         $this->validate($request, $reglas);
 
