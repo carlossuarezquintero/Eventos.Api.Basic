@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,6 +16,12 @@ use Illuminate\Http\Request;
 Route::get('prueba',function(){
     return 1;
 });
+
+
+
+
+
+
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
@@ -23,5 +30,27 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
+      
     });
+});
+
+Route::group(['prefix' => 'tipos'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('tiposid', 'TipoidController@index');
+      
+    });
+});
+
+
+
+Route::group([    
+    'namespace' => 'Auth',    
+    'middleware' => 'api',    
+    'prefix' => 'password'
+], function () {    
+    Route::post('create', 'PasswordResetController@create');
+    Route::get('find/{token}', 'PasswordResetController@find');
+    Route::post('reset', 'PasswordResetController@reset');
+  
 });

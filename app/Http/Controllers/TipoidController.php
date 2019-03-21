@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Tipoid;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class TipoidController extends Controller
 {
@@ -14,8 +20,16 @@ class TipoidController extends Controller
      */
     public function index()
     {
-        //
+       // $this->middleware('atu')->except('logout');
+        
+        $listaid = DB::Table('tiposid')
+        ->select('*')
+        ->orderBy('id', 'ASC')->get();
+        
+       // return response()->json(compact('listaid'), 200);
+       return $this->showAll($listaid);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -24,7 +38,8 @@ class TipoidController extends Controller
      */
     public function create()
     {
-        //
+       
+        return 1;
     }
 
     /**

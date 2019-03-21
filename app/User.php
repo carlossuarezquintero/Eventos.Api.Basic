@@ -26,7 +26,7 @@ class User extends Authenticatable
             'id_rol',
             'id_tipotel',
             'telefono',
-            'correo' ,
+            'email',
             'tipo_identificacion',
             'password',
             'ultimoinicio'   ,
@@ -34,6 +34,7 @@ class User extends Authenticatable
             'unavegador'   ,
             'isline'    ,
             'active',
+            'activation_token',
     ];
 
     /**
@@ -42,6 +43,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'activation_token',
+        'password', 'remember_token', 
     ];
 }
