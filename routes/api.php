@@ -88,6 +88,18 @@ Route::group(['prefix' => 'ponent'], function () {
     });
 });
 
+
+Route::group(['prefix' => 'money'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('monedas', 'MonedaController@index');
+        Route::post('monedascreate', 'MonedaController@create');
+        Route::PUT('monedasupdate', 'MonedaController@update');
+        Route::DELETE('monedasdelete', 'MonedaController@destroy');
+      
+    });
+});
+
 Route::group(['prefix' => 'ent'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {

@@ -4,82 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Moneda;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MonedaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $monedas = Moneda::all();
+        return $this->showAll($monedas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:monedas,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $monedas = new Moneda([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $monedas->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Moneda $Moneda)
     {
-        //
+        $monedas = Moneda::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $monedas->nombre = $request->nombre;
+        $monedas->save();
+
+        return $this->successResponse($monedas,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Moneda  $moneda
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Moneda $moneda)
+   
+    public function destroy(Request $request,Moneda $Moneda)
     {
-        //
-    }
+        $monedas = Moneda::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Moneda  $moneda
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Moneda $moneda)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Moneda  $moneda
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Moneda $moneda)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Moneda  $moneda
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Moneda $moneda)
-    {
-        //
+        $monedas->delete();
+        return $this->successResponse($monedas,200);
     }
 }
