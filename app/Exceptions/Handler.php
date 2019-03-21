@@ -100,6 +100,8 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('El tipo de datos no es el correcto ', 409);
             }
 
+          
+            
             
         }
 

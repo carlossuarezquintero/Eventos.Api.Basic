@@ -3,83 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Tipotelefono;
+use App\User;
+use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TipotelefonoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $listatipo = Tipotelefono::all();
+        return $this->showAll($listatipo);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:tipostelefonos,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $tipotelefono = new Tipotelefono([
+            'nombre'    => ucfirst(strtolower($request->nombre)),
+        ]);
+
+        $tipotelefono->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   
+    
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Tipotelefono  $tipotelefono
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tipotelefono $tipotelefono)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tipotelefono  $tipotelefono
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tipotelefono $tipotelefono)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tipotelefono  $tipotelefono
-     * @return \Illuminate\Http\Response
-     */
+   
     public function update(Request $request, Tipotelefono $tipotelefono)
     {
-        //
+        $tipotel = Tipotelefono::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $tipotel->nombre = $request->nombre;
+        $tipotel->save();
+
+        return $this->successResponse($tipotel,200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tipotelefono  $tipotelefono
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Tipotelefono $tipotelefono)
+  
+    public function destroy(Request $request,Tipotelefono $tipotelefono)
     {
-        //
+        $tipotel = Tipotelefono::findOrFail($request->id);
+
+        $tipotel->delete();
+        return $this->successResponse($tipotel,200);
     }
 }

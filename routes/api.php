@@ -38,6 +38,42 @@ Route::group(['prefix' => 'tipos'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('tiposid', 'TipoidController@index');
+        Route::post('tiposidcreate', 'TipoidController@create');
+        Route::PUT('tiposidupdate', 'TipoidController@update');
+        Route::DELETE('tiposidelete', 'TipoidController@destroy');
+      
+    });
+});
+
+Route::group(['prefix' => 'ent'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('entidades', 'EntidadController@index');
+        Route::post('entidadescreate', 'EntidadController@create');
+        Route::PUT('entidadesupdate', 'EntidadController@update');
+        Route::DELETE('entidadesdelete', 'EntidadController@destroy');
+      
+    });
+});
+
+Route::group(['prefix' => 'tel'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('telefonos', 'TipotelefonoController@index');
+        Route::post('telefonoscreate', 'TipotelefonoController@create');
+        Route::PUT('telefonosupdate', 'TipotelefonoController@update');
+        Route::DELETE('telefonosdelete', 'TipotelefonoController@destroy');
+      
+    });
+});
+
+Route::group(['prefix' => 'title'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('titulos', 'TituloController@index');
+        Route::post('tituloscreate', 'TituloController@create');
+        Route::PUT('titulosupdate', 'TituloController@update');
+        Route::DELETE('titulosdelete', 'TituloController@destroy');
       
     });
 });
