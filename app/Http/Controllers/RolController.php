@@ -7,79 +7,52 @@ use Illuminate\Http\Request;
 
 class RolController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
-        //
+        $roles = Rol::all();
+        return $this->showAll($roles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:titulos,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $roles = new Rol([
+            'nombre'    => ucfirst(strtolower($request->nombre)),
+        ]);
+
+        $roles->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Rol  $rol
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Rol $rol)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Rol  $rol
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Rol $rol)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rol  $rol
-     * @return \Illuminate\Http\Response
-     */
+  
+   
     public function update(Request $request, Rol $rol)
     {
-        //
+        $roles = Rol::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $roles->nombre = $request->nombre;
+        $roles->save();
+
+        return $this->successResponse($roles,200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Rol  $rol
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Rol $rol)
+   
+    public function destroy(Request $request,Rol $rol)
     {
-        //
+        $roles = Rol::findOrFail($request->id);
+
+        $roles->delete();
+        return $this->successResponse($roles,200);
     }
 }

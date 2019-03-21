@@ -34,6 +34,19 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::group(['prefix' => 'rol'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('roles', 'StatuController@index');
+        Route::post('rolescreate', 'StatuController@create');
+        Route::PUT('rolesupdate', 'StatuController@update');
+        Route::DELETE('rolesdelete', 'StatuController@destroy');
+      
+    });
+});
+
+
+
 Route::group(['prefix' => 'tipos'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
