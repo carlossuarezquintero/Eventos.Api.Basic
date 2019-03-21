@@ -4,82 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Dia;
 use Illuminate\Http\Request;
-
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class DiaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $dias = Dia::all();
+        return $this->showAll($dias);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:dias,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $dias = new Dia([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $dias->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Dia $Dia)
     {
-        //
+        $dias = Dia::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $dias->nombre = $request->nombre;
+        $dias->save();
+
+        return $this->successResponse($dias,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Dia  $dia
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Dia $dia)
+   
+    public function destroy(Request $request,Dia $Dia)
     {
-        //
-    }
+        $dias = Dia::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Dia  $dia
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Dia $dia)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Dia  $dia
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Dia $dia)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Dia  $dia
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Dia $dia)
-    {
-        //
+        $dias->delete();
+        return $this->successResponse($dias,200);
     }
 }

@@ -111,6 +111,17 @@ Route::group(['prefix' => 'ent'], function () {
     });
 });
 
+Route::group(['prefix' => 'setting'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('dias', 'DiaController@index');
+        Route::post('diascreate', 'DiaController@create');
+        Route::PUT('diasupdate', 'DiaController@update');
+        Route::DELETE('diasdelete', 'DiaController@destroy');
+      
+    });
+});
+
 Route::group(['prefix' => 'tel'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
