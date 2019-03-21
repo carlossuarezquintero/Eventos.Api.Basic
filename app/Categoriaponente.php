@@ -9,7 +9,7 @@ class Categoriaponente extends Model
 {
     use  SoftDeletes;
 
-    protected $table = 'categoriaponentes';
+    protected $table = 'categoriasponentes';
     protected $dates = ['deleted_at'];
 
     protected $fillable = [

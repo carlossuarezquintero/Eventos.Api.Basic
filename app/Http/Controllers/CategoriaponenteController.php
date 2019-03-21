@@ -4,82 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Categoriaponente;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CategoriaponenteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $categoriasponentes = Categoriaponente::all();
+        return $this->showAll($categoriasponentes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:categoriasponentes,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $categoriasponentes = new Categoriaponente([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $categoriasponentes->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Categoriaponente $Categoriaponente)
     {
-        //
+        $categoriasponentes = Categoriaponente::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $categoriasponentes->nombre = $request->nombre;
+        $categoriasponentes->save();
+
+        return $this->successResponse($categoriasponentes,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Categoriaponente  $categoriaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Categoriaponente $categoriaponente)
+   
+    public function destroy(Request $request,Categoriaponente $Categoriaponente)
     {
-        //
-    }
+        $categoriasponentes = Categoriaponente::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Categoriaponente  $categoriaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Categoriaponente $categoriaponente)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Categoriaponente  $categoriaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Categoriaponente $categoriaponente)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Categoriaponente  $categoriaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Categoriaponente $categoriaponente)
-    {
-        //
+        $categoriasponentes->delete();
+        return $this->successResponse($categoriasponentes,200);
     }
 }
