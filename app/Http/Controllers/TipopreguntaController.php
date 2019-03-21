@@ -4,82 +4,59 @@ namespace App\Http\Controllers;
 
 use App\Tipopregunta;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TipopreguntaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $tipospreguntas = Tipopregunta::all();
+        return $this->showAll($tipospreguntas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:tipospreguntas,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $tipospreguntas = new Tipopregunta([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $tipospreguntas->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Tipopregunta  $tipopregunta
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tipopregunta $tipopregunta)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tipopregunta  $tipopregunta
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tipopregunta $tipopregunta)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tipopregunta  $tipopregunta
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Tipopregunta $tipopregunta)
     {
-        //
+        $tipospreguntas = Tipopregunta::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $tipospreguntas->nombre = $request->nombre;
+        $tipospreguntas->save();
+
+        return $this->successResponse($tipospreguntas,200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tipopregunta  $tipopregunta
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Tipopregunta $tipopregunta)
+   
+    public function destroy(Request $request,Tipopregunta $tipopregunta)
     {
-        //
+        $tipospreguntas = Tipopregunta::findOrFail($request->id);
+
+        $tipospreguntas->delete();
+        return $this->successResponse($tipospreguntas,200);
     }
 }

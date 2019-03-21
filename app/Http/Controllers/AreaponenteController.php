@@ -4,82 +4,59 @@ namespace App\Http\Controllers;
 
 use App\Areaponente;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AreaponenteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        
+        $areasponentes = Areaponente::all();
+        return $this->showAll($areasponentes);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:areasponentes,nombre'
+        ];
+        $this->validate($request, $reglas);
+
+        $areasponentes = new Areaponente([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $areasponentes->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Areaponente $Areaponente)
     {
-        //
+        $areasponentes = Areaponente::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $areasponentes->nombre = $request->nombre;
+        $areasponentes->save();
+
+        return $this->successResponse($areasponentes,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Areaponente  $areaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Areaponente $areaponente)
+   
+    public function destroy(Request $request,Areaponente $Areaponente)
     {
-        //
-    }
+        $areasponentes = Areaponente::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Areaponente  $areaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Areaponente $areaponente)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Areaponente  $areaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Areaponente $areaponente)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Areaponente  $areaponente
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Areaponente $areaponente)
-    {
-        //
+        $areasponentes->delete();
+        return $this->successResponse($areasponentes,200);
     }
 }

@@ -47,6 +47,8 @@ Route::group(['prefix' => 'rol'], function () {
 
 
 
+
+
 Route::group(['prefix' => 'tipos'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
@@ -54,6 +56,24 @@ Route::group(['prefix' => 'tipos'], function () {
         Route::post('tiposidcreate', 'TipoidController@create');
         Route::PUT('tiposidupdate', 'TipoidController@update');
         Route::DELETE('tiposidelete', 'TipoidController@destroy');
+
+        Route::get('tipospr', 'TipopreguntaController@index');
+        Route::post('tiposprcreate', 'TipopreguntaController@create');
+        Route::PUT('tiposprupdate', 'TipopreguntaController@update');
+        Route::DELETE('tiposprdelete', 'TipopreguntaController@destroy');
+
+
+      
+    });
+});
+
+Route::group(['prefix' => 'ponent'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('ponentes', 'AreaponenteController@index');
+        Route::post('ponentescreate', 'AreaponenteController@create');
+        Route::PUT('ponentesupdate', 'AreaponenteController@update');
+        Route::DELETE('ponentesdelete', 'AreaponenteController@destroy');
       
     });
 });
