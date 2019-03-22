@@ -62,6 +62,11 @@ Route::group(['prefix' => 'tipos'], function () {
         Route::PUT('tiposprupdate', 'TipopreguntaController@update');
         Route::DELETE('tiposprdelete', 'TipopreguntaController@destroy');
 
+        Route::get('tipospqr', 'TipopqrController@index');
+        Route::post('tipospqrcreate', 'TipopqrController@create');
+        Route::PUT('tipospqrupdate', 'TipopqrController@update');
+        Route::DELETE('tipospqrdelete', 'TipopqrController@destroy');
+
 
       
     });
