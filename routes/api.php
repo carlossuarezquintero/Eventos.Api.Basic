@@ -108,6 +108,18 @@ Route::group(['prefix' => 'ponent'], function () {
     });
 });
 
+Route::group(['prefix' => 'ev'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('categorias', 'CategoriaeventoController@index');
+        Route::post('categoriascreate', 'CategoriaeventoController@create');
+        Route::PUT('categoriasupdate', 'CategoriaeventoController@update');
+        Route::DELETE('categoriasdelete', 'CategoriaeventoController@destroy');
+
+      
+    });
+});
+
 
 Route::group(['prefix' => 'country'], function () {
    

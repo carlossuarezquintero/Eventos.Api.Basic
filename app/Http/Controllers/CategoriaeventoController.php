@@ -4,82 +4,62 @@ namespace App\Http\Controllers;
 
 use App\Categoriaevento;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CategoriaeventoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $categorias = Categoriaevento::all();
+        return $this->showAll($categorias);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:categoriaeventos,nombre',
+            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $categorias = new Categoriaevento([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'id_usuario'=>$request->id_usuario,
+        ]);
+
+        $categorias->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Categoriaevento $Categoriaevento)
     {
-        //
+        $categorias = Categoriaevento::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required|min:4',
+            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $categorias->nombre = $request->nombre;
+        $categorias->id_usuario =$request->id_usuario;
+        $categorias->save();
+
+        return $this->successResponse($categorias,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Categoriaevento  $categoriaevento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Categoriaevento $categoriaevento)
+   
+    public function destroy(Request $request,Categoriaevento $Categoriaevento)
     {
-        //
-    }
+        $categorias = Categoriaevento::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Categoriaevento  $categoriaevento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Categoriaevento $categoriaevento)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Categoriaevento  $categoriaevento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Categoriaevento $categoriaevento)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Categoriaevento  $categoriaevento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Categoriaevento $categoriaevento)
-    {
-        //
+        $categorias->delete();
+        return $this->successResponse($categorias,200);
     }
 }
