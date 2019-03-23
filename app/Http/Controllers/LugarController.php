@@ -4,82 +4,74 @@ namespace App\Http\Controllers;
 
 use App\Lugar;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LugarController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $lugares = Lugar::all();
+        return $this->showAll($lugares);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'nombre' =>'required|unique:Lugares,nombre',
+            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+            'id_ciudad'    => 'required|numeric|exists:ciudades,id',
+            'latitud'=>'required',
+            'longitud'=>'required',
+        ];
+        $this->validate($request, $reglas);
+
+        $lugares = new Lugar([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'id_usuario'=>$request->id_usuario,
+            'id_ciudad'=>$request->id_ciudad,
+            'latitud'=>$request->latitud,
+            'longitud'=>$request->logitud,
+        ]);
+
+        $lugares->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Lugar $Lugar)
     {
-        //
+        $lugares = Lugar::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required|min:4',
+            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+            'id_ciudad'    => 'required|numeric|exists:ciudades,id',
+            'latitud'=>'required',
+            'longitud'=>'required',
+        ];
+        $this->validate($request, $reglas);
+
+        $lugares->nombre = $request->nombre;
+        $lugares->id_usuario =$request->id_usuario;
+        $lugares->id_ciudad =$request->id_ciudad;
+        $lugares->latitud =$request->latitud;
+        $lugares->longitud =$request->longitud;
+        
+        $lugares->save();
+
+        return $this->successResponse($lugares,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Lugar  $lugar
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Lugar $lugar)
+   
+    public function destroy(Request $request,Lugar $Lugar)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Lugar  $lugar
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Lugar $lugar)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Lugar  $lugar
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Lugar $lugar)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Lugar  $lugar
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Lugar $lugar)
-    {
-        //
+        $lugares = Lugar::findOrFail($request->id);
+        $lugares->delete();
+        return $this->successResponse($lugares,200);
     }
 }

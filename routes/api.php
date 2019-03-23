@@ -116,6 +116,13 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('categoriasupdate', 'CategoriaeventoController@update');
         Route::DELETE('categoriasdelete', 'CategoriaeventoController@destroy');
 
+        Route::get('lugares', 'LugarController@index');
+        Route::post('lugarescreate', 'LugarController@create');
+        Route::PUT('lugaresupdate', 'LugarController@update');
+        Route::DELETE('lugaresdelete', 'LugarController@destroy');
+
+
+
       
     });
 });

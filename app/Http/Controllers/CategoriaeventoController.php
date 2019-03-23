@@ -58,7 +58,6 @@ class CategoriaeventoController extends Controller
     public function destroy(Request $request,Categoriaevento $Categoriaevento)
     {
         $categorias = Categoriaevento::findOrFail($request->id);
-
         $categorias->delete();
         return $this->successResponse($categorias,200);
     }
