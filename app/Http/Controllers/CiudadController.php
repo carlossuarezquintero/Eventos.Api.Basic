@@ -7,79 +7,59 @@ use Illuminate\Http\Request;
 
 class CiudadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $ciudades = Ciudad::all();
+        return $this->showAll($ciudades);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'nombre' =>'required|unique:ciudades,nombre',
+            'id_pais' =>'required|exists:paises,id|numeric',
+           
+            
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $ciudades = new Ciudad([
+
+            'nombre' =>ucfirst(strtolower($request->nombre)),
+            'id_pais' =>$request->id_pais,
+           
+        ]);
+
+        $ciudades->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Ciudad $Ciudad)
     {
-        //
+        $Ciudad = Ciudad::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'min:3',
+            'id_pais'=>'required|exists:paises,id|numeric',
+        ];
+        $this->validate($request, $reglas);
+
+        $Ciudad->nombre = $request->nombre;
+        $Ciudad->save();
+
+        return $this->successResponse($Ciudad,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Ciudad  $ciudad
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ciudad $ciudad)
+   
+    public function destroy(Request $request,Ciudad $Ciudad)
     {
-        //
-    }
+        $ciudades = Ciudad::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Ciudad  $ciudad
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ciudad $ciudad)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Ciudad  $ciudad
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ciudad $ciudad)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Ciudad  $ciudad
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ciudad $ciudad)
-    {
-        //
+        $ciudades->delete();
+        return $this->successResponse($ciudades,200);
     }
 }

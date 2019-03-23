@@ -34,6 +34,19 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+
+Route::group(['prefix' => 'u'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('usuarios', 'UsuarioinicioController@index');
+        Route::post('usuarioscreate', 'UsuarioinicioController@create');
+        Route::PUT('usuariosupdate', 'UsuarioinicioController@update');
+        Route::DELETE('usuariosdelete', 'UsuarioinicioController@destroy');
+      
+    });
+});
+
+
 Route::group(['prefix' => 'rol'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
@@ -41,12 +54,14 @@ Route::group(['prefix' => 'rol'], function () {
         Route::post('rolescreate', 'StatuController@create');
         Route::PUT('rolesupdate', 'StatuController@update');
         Route::DELETE('rolesdelete', 'StatuController@destroy');
-      
+
+        Route::get('modulos', 'ModulowebController@index');
+        Route::post('moduloscreate', 'ModulowebController@create');
+        Route::PUT('modulosupdate', 'ModulowebController@update');
+        Route::DELETE('modulosdelete', 'ModulowebController@destroy');
+
     });
 });
-
-
-
 
 
 Route::group(['prefix' => 'tipos'], function () {
@@ -89,6 +104,23 @@ Route::group(['prefix' => 'ponent'], function () {
         Route::post('categoriascreate', 'CategoriaponenteController@create');
         Route::PUT('categoriasupdate', 'CategoriaponenteController@update');
         Route::DELETE('categoriasdelete', 'CategoriaponenteController@destroy');
+      
+    });
+});
+
+
+Route::group(['prefix' => 'country'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('paises', 'PaisController@index');
+        Route::post('paisescreate', 'PaisController@create');
+        Route::PUT('paisesupdate', 'PaisController@update');
+        Route::DELETE('paisesdelete', 'PaisController@destroy');
+
+        Route::get('ciudades', 'CiudadController@index');
+        Route::post('ciudadescreate', 'CiudadController@create');
+        Route::PUT('ciudadesupdate', 'CiudadController@update');
+        Route::DELETE('ciudadesdelete', 'CiudadController@destroy');
       
     });
 });

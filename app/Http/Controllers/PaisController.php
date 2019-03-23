@@ -4,82 +4,66 @@ namespace App\Http\Controllers;
 
 use App\Pais;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class PaisController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $paises = Pais::all();
+        return $this->showAll($paises);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'iso' =>'required|unique:paises,iso',
+            'nombre' =>'required|unique:paises,nombre',
+            
+            
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $paises = new Pais([
+            'iso' =>ucfirst(strtoupper($request->iso)),
+            'nombre' =>ucfirst(strtolower($request->nombre)),
+        ]);
+
+        $paises->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Pais $Pais)
     {
-        //
+        $Pais = Pais::findOrFail($request->id);
+        $reglas = [
+
+          
+            'id' =>'required',
+            'iso' =>'min:2',
+            'nombre' =>'min:3',
+        ];
+        $this->validate($request, $reglas);
+
+        $Pais->nombre = $request->nombre;
+        $Pais->save();
+
+        return $this->successResponse($Pais,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Pais  $pais
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pais $pais)
+   
+    public function destroy(Request $request,Pais $Pais)
     {
-        //
-    }
+        $paises = Pais::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pais  $pais
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pais $pais)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pais  $pais
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pais $pais)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Pais  $pais
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pais $pais)
-    {
-        //
+        $paises->delete();
+        return $this->successResponse($paises,200);
     }
 }

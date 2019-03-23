@@ -4,82 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Usuarioinicio;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioinicioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $usuariosinicios = Usuarioinicio::all();
+        return $this->showAll($usuariosinicios);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+            'ip' =>'required|ipv4',
+            'pais' =>'required',
+            'fecha' =>'required',
+            'id_usuario' =>'required|exists:usuarios,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $usuariosinicios = new Usuarioinicio([
+            'ip'    => $request->ip,
+            'pais' =>ucfirst(strtolower($request->pais)), 
+            'fecha' =>$request->fecha,
+            'id_usuario' =>$request->id_usuario,
+
+        ]);
+
+        $usuariosinicios->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Usuarioinicio  $usuarioinicio
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Usuarioinicio $usuarioinicio)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Usuarioinicio  $usuarioinicio
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Usuarioinicio $usuarioinicio)
+   
+    public function destroy(Request $request,Usuarioinicio $Usuarioinicio)
     {
-        //
-    }
+        $usuariosinicios = Usuarioinicio::findOrFail($request->id);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Usuarioinicio  $usuarioinicio
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Usuarioinicio $usuarioinicio)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Usuarioinicio  $usuarioinicio
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Usuarioinicio $usuarioinicio)
-    {
-        //
+        $usuariosinicios->delete();
+        return $this->successResponse($usuariosinicios,200);
     }
 }

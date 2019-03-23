@@ -4,82 +4,82 @@ namespace App\Http\Controllers;
 
 use App\Evento;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class EventoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $eventos = Evento::all();
+        return $this->showAll($eventos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'nombre' =>'required|min:4|exists:eventos,nombre',
+            'codigo' =>'required|min:4|exists:eventos,codigo',
+            'slogan' => 'required|min:4',
+            'descripcion'=>'required',
+            'fecha'=>'required',
+            'hora'=>'required',
+            'id_categoria'=>'required|exists:categoriaeventos,id',
+            'contacton'=>'required|min:5',
+            'contactot'=>'required|min:5',
+            'id_lugar'=>'required|exists:lugares,id',
+            'costopromedio'=>'required',
+            'id_entidad'=>'required|exists:lugares,id',
+
+            
+            
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $eventos = new Evento([
+
+            'nombre' =>ucfirst(strtolower($request->nombre)),
+            'tipo' =>$request->tipo,
+            'icono'=>$request->icono,
+            'url' =>$request->url,
+       
+            
+
+        ]);
+
+        $eventos->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Evento $Evento)
     {
-        //
+        $Evento = Evento::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'min:3',
+            'tipo' =>'min:1',
+            'url' =>'min:4',
+        ];
+        $this->validate($request, $reglas);
+
+        $Evento->nombre = $request->nombre;
+        $Evento->save();
+
+        return $this->successResponse($Evento,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Evento $evento)
+   
+    public function destroy(Request $request,Evento $Evento)
     {
-        //
-    }
+        $eventos = Evento::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Evento $evento)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Evento $evento)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Evento  $evento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Evento $evento)
-    {
-        //
+        $eventos->delete();
+        return $this->successResponse($eventos,200);
     }
 }

@@ -4,82 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Moduloweb;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class ModulowebController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $modulosweb = Moduloweb::all();
+        return $this->showAll($modulosweb);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'nombre' =>'required|unique:modulosweb,nombre',
+            'tipo' =>'required|numeric',
+            'url' =>'required',
+            
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $modulosweb = new Moduloweb([
+
+            'nombre' =>ucfirst(strtolower($request->nombre)),
+            'tipo' =>$request->tipo,
+            'icono'=>$request->icono,
+            'url' =>$request->url,
+       
+            
+
+        ]);
+
+        $modulosweb->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Moduloweb $Moduloweb)
     {
-        //
+        $Moduloweb = Moduloweb::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'min:3',
+            'tipo' =>'min:1',
+            'url' =>'min:4',
+        ];
+        $this->validate($request, $reglas);
+
+        $Moduloweb->nombre = $request->nombre;
+        $Moduloweb->save();
+
+        return $this->successResponse($Moduloweb,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Moduloweb  $moduloweb
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Moduloweb $moduloweb)
+   
+    public function destroy(Request $request,Moduloweb $Moduloweb)
     {
-        //
-    }
+        $modulosweb = Moduloweb::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Moduloweb  $moduloweb
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Moduloweb $moduloweb)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Moduloweb  $moduloweb
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Moduloweb $moduloweb)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Moduloweb  $moduloweb
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Moduloweb $moduloweb)
-    {
-        //
+        $modulosweb->delete();
+        return $this->successResponse($modulosweb,200);
     }
 }
