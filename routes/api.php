@@ -111,6 +111,14 @@ Route::group(['prefix' => 'ponent'], function () {
 Route::group(['prefix' => 'ev'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {
+
+        Route::get('eventos', 'EventoController@index');
+        Route::post('eventoscreate', 'EventoController@create');
+        Route::PUT('eventosupdate', 'EventoController@update');
+        Route::PUT('eventoscounts', 'EventoController@updatecontadores');
+        Route::DELETE('eventosdelete', 'EventoController@destroy');
+
+
         Route::get('categorias', 'CategoriaeventoController@index');
         Route::post('categoriascreate', 'CategoriaeventoController@create');
         Route::PUT('categoriasupdate', 'CategoriaeventoController@update');

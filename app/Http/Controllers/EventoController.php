@@ -22,8 +22,8 @@ class EventoController extends Controller
     {
         $reglas = [
 
-            'nombre' =>'required|min:4|exists:eventos,nombre',
-            'codigo' =>'required|min:4|exists:eventos,codigo',
+            'nombre' =>'required|min:4|unique:eventos,nombre',
+            'codigo' =>'required|min:4|unique:eventos,codigo',
             'slogan' => 'required|min:4',
             'descripcion'=>'required',
             'fecha'=>'required',
@@ -33,7 +33,11 @@ class EventoController extends Controller
             'contactot'=>'required|min:5',
             'id_lugar'=>'required|exists:lugares,id',
             'costopromedio'=>'required',
-            'id_entidad'=>'required|exists:lugares,id',
+            'id_entidad'=>'required|exists:entidades,id',
+            'id_usuario'=>'required|exists:usuarios,id',
+            'id_ciudad'=>'required|exists:ciudades,id',
+            'id_pais'=>'required|exists:paises,id',
+            'venta'=> 'required|numeric'
 
             
             
@@ -43,14 +47,33 @@ class EventoController extends Controller
 
         $eventos = new Evento([
 
+            
+
             'nombre' =>ucfirst(strtolower($request->nombre)),
-            'tipo' =>$request->tipo,
-            'icono'=>$request->icono,
-            'url' =>$request->url,
+            'codigo' =>$request->codigo,
+            'slogan' => $request->slogan,
+            'descripcion'=>$request->descripcion,
+            'fecha'=>$request->fecha,
+            'hora'=>$request->hora,
+            'id_categoria'=>$request->id_categoria,
+            'contacton'=>$request->contacton,
+            'contactot'=>$request->contactot,
+            'id_lugar'=>$request->id_lugar,
+            'costopromedio'=>$request->costopromedio,
+            'id_entidad'=>$request->id_entidad,
+            'id_usuario'=>$request->id_usuario,
+            'id_ciudad'=>$request->id_ciudad,
+            'id_pais'=>$request->id_pais,
+            'venta'=>$request->venta,
+            'countasis'=>0,
+            'count'=>0,
+            'shares'=>0,
        
             
 
         ]);
+
+        
 
         $eventos->save();
         return $this->successResponse('Registro exitoso',401);
@@ -62,18 +85,73 @@ class EventoController extends Controller
         $Evento = Evento::findOrFail($request->id);
         $reglas = [
             'id' =>'required',
-            'nombre' =>'min:3',
-            'tipo' =>'min:1',
-            'url' =>'min:4',
+            'nombre' =>'min:4',
+            'codigo' =>'min:4',
+            'slogan' => 'min:4',
+            'descripcion'=>'min:6',
+            'id_categoria'=>'exists:categoriaeventos,id',
+            'contacton'=>'min:5',
+            'contactot'=>'min:5',
+            'id_lugar'=>'exists:lugares,id',
+            'costopromedio'=>'required',
+            'id_entidad'=>'exists:entidades,id',
+            'id_usuario'=>'exists:usuarios,id',
+            'id_ciudad'=>'exists:ciudades,id',
+            'id_pais'=>'exists:paises,id',
+            'venta'=> 'numeric'
+
         ];
         $this->validate($request, $reglas);
 
-        $Evento->nombre = $request->nombre;
+       
+        $Evento->nombre=ucfirst(strtolower($request->nombre));
+        $Evento->codigo =$request->codigo;
+        $Evento->slogan = $request->slogan;
+        $Evento->descripcion=$request->descripcion;
+        $Evento->fecha=$request->fecha;
+        $Evento->hora=$request->hora;
+        $Evento->id_categoria=$request->id_categoria;
+        $Evento->contacton=$request->contacton;
+        $Evento->contactot=$request->contactot;
+        $Evento->id_lugar=$request->id_lugar;
+        $Evento->costopromedio=$request->costopromedio;
+        $Evento->id_entidad=$request->id_entidad;
+        $Evento->id_usuario=$request->id_usuario;
+        $Evento->id_ciudad=$request->id_ciudad;
+        $Evento->id_pais=$request->id_pais;
+        $Evento->venta=$request->venta;
+      
         $Evento->save();
 
         return $this->successResponse($Evento,200);
     }
 
+    public function updatecontadores(Request $request,Evento $Evento)
+    {
+       
+        $Evento = Evento::findOrFail($request->id);
+        $reglas = [
+            'id'=>'required|exists:eventos,id',
+            'countasis'=>'numeric',
+            'count'=>'numeric',
+            'shares'=>'numeric',
+
+
+        ];
+
+
+        $this->validate($request, $reglas);
+
+        $Evento->countasis= $Evento->countasis+$request->countasis;
+        $Evento->count = $Evento->count+$request->count;
+        $Evento->shares = $Evento->shares+$request->shares;
+       
+      
+        $Evento->save();
+
+
+        return $this->successResponse($Evento,200);
+    }
    
     public function destroy(Request $request,Evento $Evento)
     {
