@@ -4,82 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Eventousuarioadmin;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class EventousuarioadminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $eventousuarioadmin = Eventousuarioadmin::all();
+        return $this->showAll($eventousuarioadmin);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'id_user' =>'required|exists:usuarios,id|numeric',
+            'id_evento' =>'required|exists:eventos,id|numeric',
+           
+            
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $eventousuarioadmin = new Eventousuarioadmin([
+
+            
+            'id_user' =>$request->id_user,
+            'id_evento'=>$request->id_evento,
+            
+        ]);
+
+        $eventousuarioadmin->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Eventousuarioadmin $Eventousuarioadmin)
     {
-        //
+        $eventousuarioadmin = Eventousuarioadmin::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'id_user' =>'required',
+            'id_evento'=>'required',
+        ];
+        $this->validate($request, $reglas);
+
+        $eventousuarioadmin->id_user = $request->id_user;
+        $eventousuarioadmin->id_evento = $request->id_evento;
+        $eventousuarioadmin->save();
+
+        return $this->successResponse($eventousuarioadmin,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Eventousuarioadmin  $eventousuarioadmin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Eventousuarioadmin $eventousuarioadmin)
+   
+    public function destroy(Request $request,Eventousuarioadmin $Eventousuarioadmin)
     {
-        //
-    }
+        $eventousuarioadmin = Eventousuarioadmin::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Eventousuarioadmin  $eventousuarioadmin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Eventousuarioadmin $eventousuarioadmin)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Eventousuarioadmin  $eventousuarioadmin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Eventousuarioadmin $eventousuarioadmin)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Eventousuarioadmin  $eventousuarioadmin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Eventousuarioadmin $eventousuarioadmin)
-    {
-        //
+        $eventousuarioadmin->delete();
+        return $this->successResponse($eventousuarioadmin,200);
     }
 }

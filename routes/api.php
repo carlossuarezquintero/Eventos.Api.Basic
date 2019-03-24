@@ -118,6 +118,16 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('eventoscounts', 'EventoController@updatecontadores');
         Route::DELETE('eventosdelete', 'EventoController@destroy');
 
+        Route::get('admin', 'EventousuarioadminController@index');
+        Route::post('admincreate', 'EventousuarioadminController@create');
+        Route::PUT('adminupdate', 'EventousuarioadminController@update');
+        Route::DELETE('admindelete', 'EventousuarioadminController@destroy');
+
+        Route::get('inscripcion', 'EventousuarioinscripcionController@index');
+        Route::post('inscripcioncreate', 'EventousuarioinscripcionController@create');
+        Route::PUT('inscripcionupdate', 'EventousuarioinscripcionController@update');
+        Route::DELETE('inscripciondelete', 'EventousuarioinscripcionController@destroy');
+
 
         Route::get('categorias', 'CategoriaeventoController@index');
         Route::post('categoriascreate', 'CategoriaeventoController@create');

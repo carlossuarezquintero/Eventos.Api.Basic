@@ -4,82 +4,75 @@ namespace App\Http\Controllers;
 
 use App\Eventousuarioinscripcion;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class EventousuarioinscripcionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $Eventousuarioinscripcion = Eventousuarioinscripcion::all();
+        return $this->showAll($Eventousuarioinscripcion);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+    public function create(Request $request)
     {
-        //
+        $reglas = [
+
+            'id_user' =>'required|exists:usuarios,id|numeric',
+            'id_evento' =>'required|exists:eventos,id|numeric',
+            'id_status'=>'required|exists:status,id|numeric',
+            'uipapp' =>'ipv4',
+         
+        ];
+        $this->validate($request, $reglas);
+
+        $Eventousuarioinscripcion = new Eventousuarioinscripcion([
+
+            
+            'id_user' =>$request->id_user,
+            'id_evento'=>$request->id_evento,
+            'id_status'=>$request->id_status,
+            'uipapp'=>$request->ipapp,
+            
+        ]);
+
+        $Eventousuarioinscripcion->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request,Eventousuarioinscripcion $Eventousuarioinscripcion)
     {
-        //
+        $Eventousuarioinscripcion = Eventousuarioinscripcion::findOrFail($request->id);
+        $reglas = [
+
+            'id' =>'required',
+            'id_user' =>'required|exists:usuarios,id|numeric',
+            'id_evento' =>'required|exists:eventos,id|numeric',
+            'id_status'=>'required|exists:status,id|numeric',
+            'uipapp' =>'ipv4'
+        ];
+        $this->validate($request, $reglas);
+
+        $Eventousuarioinscripcion->id_user = $request->id_user;
+        $Eventousuarioinscripcion->id_evento = $request->id_evento;
+        $Eventousuarioinscripcion->id_status = $request->id_status;
+        $Eventousuarioinscripcion->uipapp = $request->ipapp;
+        $Eventousuarioinscripcion->save();
+
+        return $this->successResponse($Eventousuarioinscripcion,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Eventousuarioinscripcion  $eventousuarioinscripcion
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Eventousuarioinscripcion $eventousuarioinscripcion)
+   
+    public function destroy(Request $request,Eventousuarioinscripcion $Eventousuarioinscripcion)
     {
-        //
-    }
+        $Eventousuarioinscripcion = Eventousuarioinscripcion::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Eventousuarioinscripcion  $eventousuarioinscripcion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Eventousuarioinscripcion $eventousuarioinscripcion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Eventousuarioinscripcion  $eventousuarioinscripcion
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Eventousuarioinscripcion $eventousuarioinscripcion)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Eventousuarioinscripcion  $eventousuarioinscripcion
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Eventousuarioinscripcion $eventousuarioinscripcion)
-    {
-        //
+        $Eventousuarioinscripcion->delete();
+        return $this->successResponse($Eventousuarioinscripcion,200);
     }
 }
