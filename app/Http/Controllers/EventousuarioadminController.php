@@ -44,6 +44,7 @@ class EventousuarioadminController extends Controller
 
     public function indexuser(Request $request,Eventousuarioadmin $Eventousuarioadmin)
     {
+        // POR REVISAR
        // return $request->id;
       // $eventousuarioadmin = DB::table('eventosusuarioadmin')->select('*')->where('id_user', $request->id)->get();
 
