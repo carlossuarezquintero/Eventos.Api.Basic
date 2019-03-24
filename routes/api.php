@@ -189,6 +189,18 @@ Route::group(['prefix' => 'money'], function () {
     });
 });
 
+Route::group(['prefix' => 'img'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('imagenes', 'ImageneventoController@index');
+        Route::get('imagenes/{id}', 'ImageneventoController@indexu');
+        Route::post('imagenescreate', 'ImageneventoController@create');
+        Route::PUT('imagenesupdate', 'ImageneventoController@update');
+        Route::DELETE('imagenesdelete', 'ImageneventoController@destroy');
+      
+    });
+});
+
 Route::group(['prefix' => 'ent'], function () {
    
     Route::group(['middleware' => 'auth:api'], function() {

@@ -108,8 +108,9 @@ class EntidadController extends Controller
     public function destroy(Request $request)
     {
         $entidad = Entidad::findOrFail($request->id);
-        Storage::delete($entidad->logo);
+        
         $entidad->delete();
+        Storage::delete($entidad->logo);
         return $this->successResponse($entidad,200);
     }
 }
