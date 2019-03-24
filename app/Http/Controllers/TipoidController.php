@@ -37,6 +37,15 @@ class TipoidController extends Controller
         
     }
 
+
+
+    public function indexu(Request $request,Tipoid $tipoid)
+    {
+        
+        $tipoid = Tipoid::findOrFail($request->id);
+
+        return $this->successResponse($tipoid,200);
+    }
   
     public function update(Request $request,Tipoid $tipoid)
     {

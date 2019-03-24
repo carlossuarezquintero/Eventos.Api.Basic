@@ -18,6 +18,14 @@ class AreaponenteController extends Controller
         return $this->showAll($areasponentes);
     }
 
+    public function indexu(Request $request,Areaponente $Areaponente)
+    {
+        
+        $areasponentes = Areaponente::findOrFail($request->id);
+
+        return $this->successResponse($areasponentes,200);
+    }
+
    
     public function create(Request $request)
     {

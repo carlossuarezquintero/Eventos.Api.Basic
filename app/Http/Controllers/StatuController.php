@@ -13,6 +13,13 @@ class StatuController extends Controller
         $estados = Statu::all();
         return $this->showAll($estados);
     }
+    public function indexu(Request $request,Statu $statu)
+    {
+        
+        $estados = Statu::findOrFail($request->id);
+
+        return $this->successResponse($estados,200);
+    }
 
     public function create(Request $request)
     {

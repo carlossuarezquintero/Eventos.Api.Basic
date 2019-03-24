@@ -33,7 +33,13 @@ class TipopreguntaController extends Controller
         $tipospreguntas->save();
         return $this->successResponse('Registro exitoso',401);
     }
+    public function indexu(Request $request,Tipopregunta $tipopregunta)
+    {
+        
+        $tipospreguntas = Tipopregunta::findOrFail($request->id);
 
+        return $this->successResponse($tipospreguntas,200);
+    }
    
 
     public function update(Request $request, Tipopregunta $tipopregunta)

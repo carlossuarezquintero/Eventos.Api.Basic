@@ -49,6 +49,7 @@ class EntidadController extends Controller
             'twitter'=> $request->twitter,
             'instagram'=> $request->instagram,
             'google'=> $request->google,
+            'logo'=>$request->logo->store(''),
            // 'logo'=> 'required',
         ]);
 
@@ -56,7 +57,13 @@ class EntidadController extends Controller
         return $this->successResponse('Registro de entidad exitoso',401);
     }
 
-   
+    public function indexu(Request $request,Entidad $entidad)
+    {
+        
+        $entidad = Entidad::findOrFail($request->id);
+
+        return $this->successResponse($entidad,200);
+    }
 
     public function update(Request $request, Entidad $entidad)
     {

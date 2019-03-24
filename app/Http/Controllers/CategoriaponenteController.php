@@ -33,7 +33,13 @@ class CategoriaponenteController extends Controller
         return $this->successResponse('Registro exitoso',401);
     }
 
-   
+    public function indexu(Request $request,Categoriaponente $Categoriaponente)
+    {
+        
+        $categoriasponentes = Categoriaponente::findOrFail($request->id);
+
+        return $this->successResponse($categoriasponentes,200);
+    }
 
     public function update(Request $request, Categoriaponente $Categoriaponente)
     {

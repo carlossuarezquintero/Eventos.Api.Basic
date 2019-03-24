@@ -18,6 +18,13 @@ class TipotelefonoController extends Controller
         return $this->showAll($listatipo);
     }
 
+    public function indexu(Request $request,Tipotelefono $tipotelefono)
+    {
+        
+        $tipotelefono = Tipotelefono::findOrFail($request->id);
+
+        return $this->successResponse($tipotelefono,200);
+    }
    
     public function create(Request $request)
     {

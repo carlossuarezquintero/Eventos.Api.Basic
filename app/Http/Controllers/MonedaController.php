@@ -16,7 +16,13 @@ class MonedaController extends Controller
         $monedas = Moneda::all();
         return $this->showAll($monedas);
     }
+    public function indexu(Request $request,Moneda $Moneda)
+    {
+        
+        $monedas = Moneda::findOrFail($request->id);
 
+        return $this->successResponse($monedas,200);
+    }
    
     public function create(Request $request)
     {

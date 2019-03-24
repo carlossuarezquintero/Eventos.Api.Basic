@@ -16,7 +16,13 @@ class ModulowebController extends Controller
         $modulosweb = Moduloweb::all();
         return $this->showAll($modulosweb);
     }
+    public function indexu(Request $request,Moduloweb $Moduloweb)
+    {
+        
+        $modulosweb = Moduloweb::findOrFail($request->id);
 
+        return $this->successResponse($modulosweb,200);
+    }
    
     public function create(Request $request)
     {

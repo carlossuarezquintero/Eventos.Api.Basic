@@ -17,12 +17,19 @@ class TituloController extends Controller
         $titulos = Titulo::all();
         return $this->showAll($titulos);
     }
+    public function indexu(Request $request,Titulo $titulo)
+    {
+        
+        $titulos = Titulo::findOrFail($request->id);
+
+        return $this->successResponse($titulos,200);
+    }
 
     
     public function create(Request $request)
     {
         $reglas = [
-            'nombre' =>'required|unique:titulos,nombre'
+            'nombre' =>'required|unique:titulo,nombre'
         ];
         $this->validate($request, $reglas);
 

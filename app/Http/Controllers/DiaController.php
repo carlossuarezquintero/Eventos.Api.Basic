@@ -15,7 +15,13 @@ class DiaController extends Controller
         $dias = Dia::all();
         return $this->showAll($dias);
     }
+    public function indexu(Request $request,Dia $Dia)
+    {
+        
+        $dias = Dia::findOrFail($request->id);
 
+        return $this->successResponse($dias,200);
+    }
    
     public function create(Request $request)
     {

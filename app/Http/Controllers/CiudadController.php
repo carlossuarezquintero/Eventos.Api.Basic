@@ -37,6 +37,13 @@ class CiudadController extends Controller
         return $this->successResponse('Registro exitoso',401);
     }
 
+    public function indexu(Request $request,Ciudad $Ciudad)
+    {
+        
+        $ciudades = Ciudad::findOrFail($request->id);
+
+        return $this->successResponse($ciudades,200);
+    }
 
     public function update(Request $request,Ciudad $Ciudad)
     {

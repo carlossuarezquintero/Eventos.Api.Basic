@@ -41,7 +41,13 @@ class LugarController extends Controller
         return $this->successResponse('Registro exitoso',401);
     }
 
-   
+    public function indexu(Request $request,Lugar $Lugar)
+    {
+        
+        $lugares = Lugar::findOrFail($request->id);
+
+        return $this->successResponse($lugares,200);
+    }
 
     public function update(Request $request, Lugar $Lugar)
     {

@@ -14,6 +14,13 @@ class RolController extends Controller
         return $this->showAll($roles);
     }
 
+    public function indexu(Request $request,Rol $rol)
+    {
+        
+        $roles = Rol::findOrFail($request->id);
+
+        return $this->successResponse($roles,200);
+    }
     
     public function create(Request $request)
     {

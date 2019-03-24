@@ -15,7 +15,13 @@ class TipopqrController extends Controller
         $tipopqr = Tipopqr::all();
         return $this->showAll($tipopqr);
     }
+    public function indexu(Request $request,Tipopqr $Tipopqr)
+    {
+        
+        $tipopqr = Tipopqr::findOrFail($request->id);
 
+        return $this->successResponse($tipopqr,200);
+    }
     public function create(Request $request)
     {
        

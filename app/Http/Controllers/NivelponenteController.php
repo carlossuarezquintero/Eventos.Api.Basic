@@ -17,7 +17,13 @@ class NivelponenteController extends Controller
         return $this->showAll($nivelesponentes);
     }
 
-   
+    public function indexu(Request $request,Nivelponente $Nivelponente)
+    {
+        
+        $nivelesponentes = Nivelponente::findOrFail($request->id);
+
+        return $this->successResponse($nivelesponentes,200);
+    }
     public function create(Request $request)
     {
         $reglas = [

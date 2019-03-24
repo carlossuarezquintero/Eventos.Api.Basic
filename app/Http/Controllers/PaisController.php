@@ -16,7 +16,13 @@ class PaisController extends Controller
         $paises = Pais::all();
         return $this->showAll($paises);
     }
+    public function indexu(Request $request,Pais $Pais)
+    {
+        
+        $paises = Pais::findOrFail($request->id);
 
+        return $this->successResponse($paises,200);
+    }
    
     public function create(Request $request)
     {

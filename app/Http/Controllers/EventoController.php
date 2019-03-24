@@ -126,6 +126,13 @@ class EventoController extends Controller
         return $this->successResponse($Evento,200);
     }
 
+    public function indexu(Request $request,Evento $Evento)
+    {
+        
+        $eventos = Evento::findOrFail($request->id);
+
+        return $this->successResponse($eventos,200);
+    }
     public function updatecontadores(Request $request,Evento $Evento)
     {
        
