@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Storage;
 use Illuminate\Support\Facades\DB;
 
 class EntidadController extends Controller
@@ -92,6 +93,11 @@ class EntidadController extends Controller
         if($request->has('telefonoemp')){
             $entidad->telefonoemp = $request->telefonoemp;
         }
+
+        if($request->hasfile('logo')){
+            Storage::delete($entidad->logo);
+            $entidad->logo = $request->logo->store('');
+        }
  
         $entidad->save();
         return $this->successResponse($entidad,200);
@@ -102,7 +108,7 @@ class EntidadController extends Controller
     public function destroy(Request $request)
     {
         $entidad = Entidad::findOrFail($request->id);
-
+        Storage::delete($entidad->logo);
         $entidad->delete();
         return $this->successResponse($entidad,200);
     }

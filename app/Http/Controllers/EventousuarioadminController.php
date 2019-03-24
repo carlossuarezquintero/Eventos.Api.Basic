@@ -42,6 +42,16 @@ class EventousuarioadminController extends Controller
         return $this->successResponse('Registro exitoso',401);
     }
 
+    public function indexuser(Request $request,Eventousuarioadmin $Eventousuarioadmin)
+    {
+       // return $request->id;
+      // $eventousuarioadmin = DB::table('eventosusuarioadmin')->select('*')->where('id_user', $request->id)->get();
+
+        $eventousuarioadmin = Eventousuarioadmin::find('id_user',$request->id);
+
+        return $this->successResponse($eventousuarioadmin,200);
+    }
+   
 
     public function update(Request $request,Eventousuarioadmin $Eventousuarioadmin)
     {

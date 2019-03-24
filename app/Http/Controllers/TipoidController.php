@@ -56,7 +56,9 @@ class TipoidController extends Controller
         ];
         $this->validate($request, $reglas);
 
+        
         $tipoid->nombre = $request->nombre;
+
         $tipoid->save();
 
         return $this->successResponse($tipoid,200);

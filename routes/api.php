@@ -128,6 +128,7 @@ Route::group(['prefix' => 'ev'], function () {
         Route::DELETE('eventosdelete', 'EventoController@destroy');
 
         Route::get('admin', 'EventousuarioadminController@index');
+        Route::get('admin/{id}', 'EventousuarioadminController@indexuser');
         Route::post('admincreate', 'EventousuarioadminController@create');
         Route::PUT('adminupdate', 'EventousuarioadminController@update');
         Route::DELETE('admindelete', 'EventousuarioadminController@destroy');
