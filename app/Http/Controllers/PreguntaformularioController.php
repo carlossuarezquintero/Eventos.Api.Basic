@@ -4,82 +4,76 @@ namespace App\Http\Controllers;
 
 use App\Preguntaformulario;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PreguntaformularioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $preguntaformularios = Preguntaformulario::all();
+        return $this->showAll($preguntaformularios);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function indexu(Request $request,Preguntaformulario $Preguntaformulario)
     {
-        //
+        
+        $preguntaformularios = Preguntaformulario::findOrFail($request->id);
+
+        return $this->successResponse($preguntaformularios,200);
+    }
+    public function create(Request $request)
+    {
+        $reglas = [
+            'pregunta' =>'required',
+            'id_user'=>'required|exists:usuarios,id',
+            'id_tipop'=>'required|exists:tipospreguntas,id',
+            'id_formulario'=>'required|exists:formulario_evento,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $preguntaformularios = new Preguntaformulario([
+            'pregunta'    => ucfirst(strtoupper($request->nombre)),
+            'id_formulario'=>$request->id_formulario,
+            'id_tipop'=>$request->id_tipop,
+            'id_user'=>$request->id_user,
+        ]);
+
+        $preguntaformularios->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Preguntaformulario $Preguntaformulario)
     {
-        //
+        $preguntaformularios = Preguntaformulario::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'pregunta' =>'required',
+            'id_user'=>'required|exists:usuarios,id',
+            'id_tipop'=>'required|exists:tipospreguntas,id',
+            'id_formulario'=>'required|exists:formulario_evento,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $preguntaformularios->pregunta = $request->pregunta;
+        $preguntaformularios->id_user = $request->id_user;
+        $preguntaformularios->id_tipop = $request->id_tipop;
+        $preguntaformularios->id_formulario = $request->id_formulario;
+        $preguntaformularios->save();
+
+        return $this->successResponse($preguntaformularios,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Preguntaformulario  $preguntaformulario
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Preguntaformulario $preguntaformulario)
+   
+    public function destroy(Request $request,Preguntaformulario $Preguntaformulario)
     {
-        //
-    }
+        $preguntaformularios = Preguntaformulario::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Preguntaformulario  $preguntaformulario
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Preguntaformulario $preguntaformulario)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Preguntaformulario  $preguntaformulario
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Preguntaformulario $preguntaformulario)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Preguntaformulario  $preguntaformulario
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Preguntaformulario $preguntaformulario)
-    {
-        //
+        $preguntaformularios->delete();
+        return $this->successResponse($preguntaformularios,200);
     }
 }
