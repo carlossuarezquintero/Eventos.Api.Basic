@@ -29,7 +29,7 @@ class Evento extends Model
             'count',
             'shares',
             'id_entidad',
-            'id_usuario',
+            'id_user',
             'id_ciudad',
             'id_pais',
             'venta',

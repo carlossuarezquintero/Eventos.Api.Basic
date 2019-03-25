@@ -36,7 +36,7 @@ class EventoappController extends Controller
             'colortexto'=>'required',
             'id_evento'=>'required|exists:eventos,id',
             'id_status' =>'required|exists:status,id',
-            'id_usuario' =>'required|exists:usuarios,id',
+            'id_user' =>'required|exists:usuarios,id',
            
         ];
         $this->validate($request, $reglas);
@@ -51,7 +51,7 @@ class EventoappController extends Controller
             'colortexto'=>$request->colortexto,
             'id_evento'=>$request->id_evento,
             'id_status'=>$request->id_status,
-            'id_usuario'=>$request->id_usuario,
+            'id_user'=>$request->id_user,
         ]);
 
         $eventosapp->save();
@@ -67,7 +67,7 @@ class EventoappController extends Controller
             'id' =>'required',
             'id_evento'=>'required|exists:eventos,id',
             'id_status' =>'required|exists:status,id',
-            'id_usuario' =>'required|exists:usuarios,id',
+            'id_user' =>'required|exists:usuarios,id',
             
         ];
         $this->validate($request, $reglas);
@@ -89,7 +89,7 @@ class EventoappController extends Controller
         }
       
         $eventosapp->id_evento = $request->id_evento;
-        $eventosapp->id_usuario = $request->id_usuario;
+        $eventosapp->id_user = $request->id_user;
         $eventosapp->id_status = $request->id_status;
 
 

@@ -22,7 +22,7 @@ class LugarController extends Controller
     {
         $reglas = [
             'nombre' =>'required|unique:Lugares,nombre',
-            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+            'id_user'    => 'required|numeric|exists:usuarios,id',
             'id_ciudad'    => 'required|numeric|exists:ciudades,id',
             'latitud'=>'required',
             'longitud'=>'required',
@@ -31,7 +31,7 @@ class LugarController extends Controller
 
         $lugares = new Lugar([
             'nombre'    => ucfirst(strtoupper($request->nombre)),
-            'id_usuario'=>$request->id_usuario,
+            'id_user'=>$request->id_user,
             'id_ciudad'=>$request->id_ciudad,
             'latitud'=>$request->latitud,
             'longitud'=>$request->logitud,
@@ -55,7 +55,7 @@ class LugarController extends Controller
         $reglas = [
             'id' =>'required',
             'nombre' =>'required|min:4',
-            'id_usuario'    => 'required|numeric|exists:usuarios,id',
+            'id_user'    => 'required|numeric|exists:usuarios,id',
             'id_ciudad'    => 'required|numeric|exists:ciudades,id',
             'latitud'=>'required',
             'longitud'=>'required',
@@ -63,7 +63,7 @@ class LugarController extends Controller
         $this->validate($request, $reglas);
 
         $lugares->nombre = $request->nombre;
-        $lugares->id_usuario =$request->id_usuario;
+        $lugares->id_user =$request->id_user;
         $lugares->id_ciudad =$request->id_ciudad;
         $lugares->latitud =$request->latitud;
         $lugares->longitud =$request->longitud;

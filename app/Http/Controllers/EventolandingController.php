@@ -36,7 +36,7 @@ class EventolandingController extends Controller
             'colortexto'=>'required',
             'id_evento'=>'required|exists:eventos,id',
             'id_status' =>'required|exists:status,id',
-            'id_usuario' =>'required|exists:usuarios,id',
+            'id_user' =>'required|exists:usuarios,id',
            
         ];
         $this->validate($request, $reglas);
@@ -51,7 +51,7 @@ class EventolandingController extends Controller
             'colortexto'=>$request->colortexto,
             'id_evento'=>$request->id_evento,
             'id_status'=>$request->id_status,
-            'id_usuario'=>$request->id_usuario,
+            'id_user'=>$request->id_user,
         ]);
 
         $eventoslanding->save();
@@ -67,7 +67,7 @@ class EventolandingController extends Controller
             'id' =>'required',
             'id_evento'=>'required|exists:eventos,id',
             'id_status' =>'required|exists:status,id',
-            'id_usuario' =>'required|exists:usuarios,id',
+            'id_user' =>'required|exists:usuarios,id',
             
         ];
         $this->validate($request, $reglas);
@@ -89,7 +89,7 @@ class EventolandingController extends Controller
         }
       
         $eventoslanding->id_evento = $request->id_evento;
-        $eventoslanding->id_usuario = $request->id_usuario;
+        $eventoslanding->id_user = $request->id_user;
         $eventoslanding->id_status = $request->id_status;
 
 

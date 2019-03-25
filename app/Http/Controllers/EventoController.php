@@ -34,7 +34,7 @@ class EventoController extends Controller
             'id_lugar'=>'required|exists:lugares,id',
             'costopromedio'=>'required',
             'id_entidad'=>'required|exists:entidades,id',
-            'id_usuario'=>'required|exists:usuarios,id',
+            'id_user'=>'required|exists:usuarios,id',
             'id_ciudad'=>'required|exists:ciudades,id',
             'id_pais'=>'required|exists:paises,id',
             'venta'=> 'required|numeric'
@@ -61,7 +61,7 @@ class EventoController extends Controller
             'id_lugar'=>$request->id_lugar,
             'costopromedio'=>$request->costopromedio,
             'id_entidad'=>$request->id_entidad,
-            'id_usuario'=>$request->id_usuario,
+            'id_user'=>$request->id_user,
             'id_ciudad'=>$request->id_ciudad,
             'id_pais'=>$request->id_pais,
             'venta'=>$request->venta,
@@ -95,7 +95,7 @@ class EventoController extends Controller
             'id_lugar'=>'exists:lugares,id',
             'costopromedio'=>'required',
             'id_entidad'=>'exists:entidades,id',
-            'id_usuario'=>'exists:usuarios,id',
+            'id_user'=>'exists:usuarios,id',
             'id_ciudad'=>'exists:ciudades,id',
             'id_pais'=>'exists:paises,id',
             'venta'=> 'numeric'
@@ -116,7 +116,7 @@ class EventoController extends Controller
         $Evento->id_lugar=$request->id_lugar;
         $Evento->costopromedio=$request->costopromedio;
         $Evento->id_entidad=$request->id_entidad;
-        $Evento->id_usuario=$request->id_usuario;
+        $Evento->id_user=$request->id_user;
         $Evento->id_ciudad=$request->id_ciudad;
         $Evento->id_pais=$request->id_pais;
         $Evento->venta=$request->venta;

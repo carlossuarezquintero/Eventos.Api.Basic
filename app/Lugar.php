@@ -13,7 +13,7 @@ class Lugar extends Model
 
     protected $fillable = [
       'nombre',
-      'id_usuario',
+      'id_user',
       'latitud',
       'logitud',
       'id_ciudad',

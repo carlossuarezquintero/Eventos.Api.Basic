@@ -18,7 +18,7 @@ class Eventoapp extends Model
         'colorsubtitulos',
         'colortexto',
         'id_status',
-        'id_usuario',
+        'id_user',
 
 ];
 }
