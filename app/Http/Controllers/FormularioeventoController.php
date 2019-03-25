@@ -4,82 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Formularioevento;
 use Illuminate\Http\Request;
-
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class FormularioeventoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $formularioseventos = Formularioevento::all();
+        return $this->showAll($formularioseventos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function indexu(Request $request,Formularioevento $Formularioevento)
     {
-        //
+        
+        $formularioseventos = Formularioevento::findOrFail($request->id);
+
+        return $this->successResponse($formularioseventos,200);
+    }
+    public function create(Request $request)
+    {
+        $reglas = [
+            'nombre' =>'required|unique:formulario_evento,nombre',
+            'id_evento'=>'required|exists:eventos,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $formularioseventos = new Formularioevento([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'id_evento'=>$request->id_evento,
+        ]);
+
+        $formularioseventos->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+
+    public function update(Request $request, Formularioevento $Formularioevento)
     {
-        //
+        $formularioseventos = Formularioevento::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required',
+            'id_evento'=>'required',
+        ];
+        $this->validate($request, $reglas);
+
+        $formularioseventos->nombre = $request->nombre;
+        $formularioseventos->id_evento = $request->id_evento;
+        $formularioseventos->save();
+
+        return $this->successResponse($formularioseventos,200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Formularioevento  $formularioevento
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Formularioevento $formularioevento)
+   
+    public function destroy(Request $request,Formularioevento $Formularioevento)
     {
-        //
-    }
+        $formularioseventos = Formularioevento::findOrFail($request->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Formularioevento  $formularioevento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Formularioevento $formularioevento)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Formularioevento  $formularioevento
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Formularioevento $formularioevento)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Formularioevento  $formularioevento
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Formularioevento $formularioevento)
-    {
-        //
+        $formularioseventos->delete();
+        return $this->successResponse($formularioseventos,200);
     }
 }

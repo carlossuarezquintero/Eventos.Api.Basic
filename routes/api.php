@@ -140,6 +140,13 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('appupdate', 'EventoappController@update');
         Route::DELETE('appdelete', 'EventoappController@destroy');
 
+
+        Route::get('form', 'FormularioeventoController@index');
+        Route::get('form/{id}', 'FormularioeventoController@indexu');
+        Route::post('formcreate', 'FormularioeventoController@create');
+        Route::PUT('formupdate', 'FormularioeventoController@update');
+        Route::DELETE('formdelete', 'FormularioeventoController@destroy');
+
         Route::get('bcosto', 'EventoboletacostoController@index');
         Route::get('bcosto/{id}', 'EventoboletacostoController@indexu');
         Route::post('bcostocreate', 'EventoboletacostoController@create');
