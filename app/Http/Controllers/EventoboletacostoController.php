@@ -4,82 +4,102 @@ namespace App\Http\Controllers;
 
 use App\Eventoboletacosto;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+
 
 class EventoboletacostoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $eventoboletacosto = Eventoboletacosto::all();
+        return $this->showAll($eventoboletacosto);
+    }
+    public function indexu(Request $request,Eventoboletacosto $Eventoboletacosto)
+    {
+        
+        $eventoboletacosto = Eventoboletacosto::findOrFail($request->id);
+
+        return $this->successResponse($eventoboletacosto,200);
+    }
+   
+    public function create(Request $request)
+    {
+        $reglas = [
+           
+            'id_evento'=>'required|exists:eventos,id',
+            'id_boleta'=>'required|exists:tiposboleta,id',
+            'id_moneda'=>'required|exists:monedas,id',
+            'id_user' =>'required|exists:usuarios,id',
+            'costo'=>'required',
+           
+        ];
+        $this->validate($request, $reglas);
+
+        $eventoboletacosto = new Eventoboletacosto([
+            
+
+            'id_evento'=>$request->id_evento,
+            'id_boleta'=>$request->id_boleta,
+            'id_moneda'=>$request->id_moneda,
+            'id_user' =>$request->id_user,
+            'costo'=>$request->costo,
+        ]);
+
+        $eventoboletacosto->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+
+    public function update(Request $request, Eventoboletacosto $Eventoboletacosto)
     {
-        //
+        $eventoboletacosto = Eventoboletacosto::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'id_evento'=>'required|exists:eventos,id',
+            'id_boleta'=>'required|exists:tiposboleta,id',
+            'id_moneda'=>'required|exists:monedas,id',
+            'id_user' =>'required|exists:usuarios,id',
+            'costo'=>'required',
+            
+        ];
+        $this->validate($request, $reglas);
+
+        if($request->has('id_evento')){
+            $eventoboletacosto->id_evento = $request->id_evento;
+        }
+
+        if($request->has('id_boleta')){
+            $eventoboletacosto->id_boleta = $request->id_boleta;
+        }
+
+        if($request->has('id_moneda')){
+            $eventoboletacosto->id_moneda = $request->id_moneda;
+        }
+       
+        if($request->has('id_user')){
+            $eventoboletacosto->id_user = $request->id_user;
+        }
+      
+        $eventoboletacosto->costo = $request->costo;
+       
+
+
+        $eventoboletacosto->save();
+
+        return $this->successResponse($eventoboletacosto,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+    public function destroy(Request $request,Eventoboletacosto $Eventoboletacosto)
     {
-        //
-    }
+        $eventoboletacosto = Eventoboletacosto::findOrFail($request->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Eventoboletacosto  $eventoboletacosto
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Eventoboletacosto $eventoboletacosto)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Eventoboletacosto  $eventoboletacosto
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Eventoboletacosto $eventoboletacosto)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Eventoboletacosto  $eventoboletacosto
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Eventoboletacosto $eventoboletacosto)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Eventoboletacosto  $eventoboletacosto
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Eventoboletacosto $eventoboletacosto)
-    {
-        //
+        $eventoboletacosto->delete();
+        return $this->successResponse($eventoboletacosto,200);
     }
 }

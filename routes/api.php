@@ -75,6 +75,13 @@ Route::group(['prefix' => 'tipos'], function () {
         Route::PUT('tiposidupdate', 'TipoidController@update');
         Route::DELETE('tiposidelete', 'TipoidController@destroy');
 
+
+        Route::get('tboletas', 'TipoboletaController@index');
+        Route::get('tboletas/{id}', 'TipoboletaController@indexu');
+        Route::post('tboletascreate', 'TipoboletaController@create');
+        Route::PUT('tboletasupdate', 'TipoboletaController@update');
+        Route::DELETE('tboletasdelete', 'TipoboletaController@destroy');
+
         Route::get('tipospr', 'TipopreguntaController@index');
         Route::get('tipospr/{id}', 'TipopreguntaController@indexu');
         Route::post('tiposprcreate', 'TipopreguntaController@create');
@@ -126,6 +133,25 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('eventosupdate', 'EventoController@update');
         Route::PUT('eventoscounts', 'EventoController@updatecontadores');
         Route::DELETE('eventosdelete', 'EventoController@destroy');
+
+        Route::get('app', 'EventoappController@index');
+        Route::get('app/{id}', 'EventoappController@indexu');
+        Route::post('appcreate', 'EventoappController@create');
+        Route::PUT('appupdate', 'EventoappController@update');
+        Route::DELETE('appdelete', 'EventoappController@destroy');
+
+        Route::get('bcosto', 'EventoboletacostoController@index');
+        Route::get('bcosto/{id}', 'EventoboletacostoController@indexu');
+        Route::post('bcostocreate', 'EventoboletacostoController@create');
+        Route::PUT('bcostoupdate', 'EventoboletacostoController@update');
+        Route::DELETE('bcostodelete', 'EventoboletacostoController@destroy');
+
+
+        Route::get('landing', 'EventolandingController@index');
+        Route::get('landing/{id}', 'EventolandingController@indexu');
+        Route::post('landingcreate', 'EventolandingController@create');
+        Route::PUT('landingupdate', 'EventolandingController@update');
+        Route::DELETE('landingdelete', 'EventolandingController@destroy');
 
         Route::get('admin', 'EventousuarioadminController@index');
         Route::get('admin/{id}', 'EventousuarioadminController@indexuser');
@@ -197,6 +223,12 @@ Route::group(['prefix' => 'img'], function () {
         Route::post('imagenescreate', 'ImageneventoController@create');
         Route::PUT('imagenesupdate', 'ImageneventoController@update');
         Route::DELETE('imagenesdelete', 'ImageneventoController@destroy');
+
+        Route::get('diseno', 'DisenoeventoController@index');
+        Route::get('diseno/{id}', 'DisenoeventoController@indexu');
+        Route::post('disenocreate', 'DisenoeventoController@create');
+        Route::PUT('disenoupdate', 'DisenoeventoController@update');
+        Route::DELETE('disenodelete', 'DisenoeventoController@destroy');
       
     });
 });

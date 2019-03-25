@@ -4,82 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Tipoboleta;
 use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Illuminate\Support\Facades\DB;
 
 class TipoboletaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $tiposboletas = Tipoboleta::all();
+        return $this->showAll($tiposboletas);
+    }
+    public function indexu(Request $request,Tipoboleta $Tipoboleta)
+    {
+        
+        $tiposboletas = Tipoboleta::findOrFail($request->id);
+
+        return $this->successResponse($tiposboletas,200);
+    }
+    public function create(Request $request)
+    {
+       
+        $reglas = [
+            'nombre' =>'required|unique:tiposboleta,nombre',
+            'id_user'=>'required|exists:usuarios,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $tiposboletas = new Tipoboleta([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'id_user' =>$request->id_user,
+        ]);
+
+        $tiposboletas->save();
+        return $this->successResponse('Registro exitoso',401);
+        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+  
+    public function update(Request $request,Tipoboleta $Tipoboleta)
     {
-        //
+        $tiposboletas = Tipoboleta::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required',
+            'id_user'=>'required|exists:usuarios,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $tiposboletas->nombre = $request->nombre;
+        $tiposboletas->id_user = $request->id_user;
+        $tiposboletas->save();
+
+        return $this->successResponse($tiposboletas,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function destroy(Request $request)
     {
-        //
-    }
+        $tiposboletas = Tipoboleta::findOrFail($request->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Tipoboleta  $tipoboleta
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Tipoboleta $tipoboleta)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tipoboleta  $tipoboleta
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tipoboleta $tipoboleta)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tipoboleta  $tipoboleta
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tipoboleta $tipoboleta)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Tipoboleta  $tipoboleta
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Tipoboleta $tipoboleta)
-    {
-        //
+        $tiposboletas->delete();
+        return $this->successResponse($tiposboletas,200);
     }
 }
