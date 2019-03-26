@@ -4,82 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Idiomas;
 use Illuminate\Http\Request;
-
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class IdiomasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $idiomas = Idiomas::all();
+        return $this->showAll($idiomas);
+    }
+    public function indexu(Request $request,Idiomas $Idiomas)
+    {
+        
+        $idiomas = Idiomas::findOrFail($request->id);
+
+        return $this->successResponse($idiomas,200);
+    }
+   
+    public function create(Request $request)
+    {
+        $reglas = [
+            'nombre' =>'required|unique:idiomas,nombre',
+            'alias' =>'required|unique:idiomas,alias'
+        ];
+        $this->validate($request, $reglas);
+
+        $idiomas = new Idiomas([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'alias'    => ucfirst(strtoupper($request->nombre)),
+        ]);
+
+        $idiomas->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+
+    public function update(Request $request, Idiomas $Idiomas)
     {
-        //
+        $idiomas = Idiomas::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required',
+            'alias' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $idiomas->nombre = $request->nombre;
+        $idiomas->alias = $request->alias;
+        $idiomas->save();
+
+        return $this->successResponse($idiomas,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+    public function destroy(Request $request,Idiomas $Idiomas)
     {
-        //
-    }
+        $idiomas = Idiomas::findOrFail($request->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Idiomas  $idiomas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Idiomas $idiomas)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Idiomas  $idiomas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Idiomas $idiomas)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Idiomas  $idiomas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Idiomas $idiomas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Idiomas  $idiomas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Idiomas $idiomas)
-    {
-        //
+        $idiomas->delete();
+        return $this->successResponse($idiomas,200);
     }
 }

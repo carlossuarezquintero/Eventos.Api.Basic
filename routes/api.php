@@ -153,6 +153,12 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('pformupdate', 'PreguntaformularioController@update');
         Route::DELETE('pformdelete', 'PreguntaformularioController@destroy');
 
+        Route::get('opciones', 'OpcionselctController@index');
+        Route::get('opciones/{id}', 'OpcionselctController@indexu');
+        Route::post('opcionescreate', 'OpcionselctController@create');
+        Route::PUT('opcionesupdate', 'OpcionselctController@update');
+        Route::DELETE('opcionesdelete', 'OpcionselctController@destroy');
+
         Route::get('bcosto', 'EventoboletacostoController@index');
         Route::get('bcosto/{id}', 'EventoboletacostoController@indexu');
         Route::post('bcostocreate', 'EventoboletacostoController@create');
@@ -266,6 +272,25 @@ Route::group(['prefix' => 'setting'], function () {
         Route::post('diascreate', 'DiaController@create');
         Route::PUT('diasupdate', 'DiaController@update');
         Route::DELETE('diasdelete', 'DiaController@destroy');
+      
+    });
+});
+
+
+Route::group(['prefix' => 'lang'], function () {
+   
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('idiomas', 'IdiomasController@index');
+        Route::get('idiomas/{id}', 'IdiomasController@indexu');
+        Route::post('idiomascreate', 'IdiomasController@create');
+        Route::PUT('idiomasupdate', 'IdiomasController@update');
+        Route::DELETE('idiomasdelete', 'IdiomasController@destroy');
+
+        Route::get('traductor', 'TraductorController@index');
+        Route::get('traductor/{id}', 'TraductorController@indexu');
+        Route::post('traductorcreate', 'TraductorController@create');
+        Route::PUT('traductorupdate', 'TraductorController@update');
+        Route::DELETE('traductordelete', 'TraductorController@destroy');
       
     });
 });

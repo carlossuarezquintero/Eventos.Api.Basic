@@ -50,7 +50,7 @@ class CategoriaponenteController extends Controller
         ];
         $this->validate($request, $reglas);
 
-        $categoriasponentes->nombre = $request->nombre;
+        $categoriasponentes->nombre = ucfirst(strtoupper($request->nombre));
         $categoriasponentes->save();
 
         return $this->successResponse($categoriasponentes,200);

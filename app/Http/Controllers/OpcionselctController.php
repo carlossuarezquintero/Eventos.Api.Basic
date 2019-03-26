@@ -4,82 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Opcionselct;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OpcionselctController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $opciones = Opcionselct::all();
+        return $this->showAll($opciones);
+    }
+    public function indexu(Request $request,Opcionselct $Opcionselct)
+    {
+        
+        $opciones = Opcionselct::findOrFail($request->id);
+
+        return $this->successResponse($opciones,200);
+    }
+   
+    public function create(Request $request)
+    {
+        $reglas = [
+            'nombre' =>'required|unique:opciones_select,nombre',
+            'id_pregunta_for'=>'required|exists:preguntas_formulario,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $opciones = new Opcionselct([
+            'nombre'    => ucfirst(strtoupper($request->nombre)),
+            'id_pregunta_for'=>$request->id_pregunta_for,
+        ]);
+
+        $opciones->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+
+    public function update(Request $request, Opcionselct $Opcionselct)
     {
-        //
+        $opciones = Opcionselct::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'nombre' =>'required',
+            'id_pregunta_for'=>'required|exists:preguntas_formulario,id',
+        ];
+        $this->validate($request, $reglas);
+
+        $opciones->nombre = $request->nombre;
+        $opciones->id_pregunta_for = $request->id_pregunta_for;
+        $opciones->save();
+
+        return $this->successResponse($opciones,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+    public function destroy(Request $request,Opcionselct $Opcionselct)
     {
-        //
-    }
+        $opciones = Opcionselct::findOrFail($request->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Opcionselct  $opcionselct
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Opcionselct $opcionselct)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Opcionselct  $opcionselct
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Opcionselct $opcionselct)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Opcionselct  $opcionselct
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Opcionselct $opcionselct)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Opcionselct  $opcionselct
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Opcionselct $opcionselct)
-    {
-        //
+        $opciones->delete();
+        return $this->successResponse($opciones,200);
     }
 }

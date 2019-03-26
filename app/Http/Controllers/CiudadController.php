@@ -55,7 +55,7 @@ class CiudadController extends Controller
         ];
         $this->validate($request, $reglas);
 
-        $Ciudad->nombre = $request->nombre;
+        $Ciudad->nombre = ucfirst(strtolower($request->nombre));
         $Ciudad->save();
 
         return $this->successResponse($Ciudad,200);

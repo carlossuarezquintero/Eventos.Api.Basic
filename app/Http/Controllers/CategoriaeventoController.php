@@ -53,7 +53,7 @@ class CategoriaeventoController extends Controller
         ];
         $this->validate($request, $reglas);
 
-        $categorias->nombre = $request->nombre;
+        $categorias->nombre = ucfirst(strtoupper($request->nombre));
         $categorias->id_usuario =$request->id_usuario;
         $categorias->save();
 
