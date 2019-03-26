@@ -9,6 +9,8 @@ class Preguntaformulario extends Model
 {
     use  SoftDeletes;
 
+    use  SoftDeletes;
+
     protected $table = 'preguntas_formulario';
     protected $dates = ['deleted_at'];
 

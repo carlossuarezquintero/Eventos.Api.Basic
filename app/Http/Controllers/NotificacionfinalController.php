@@ -4,82 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Notificacionfinal;
 use Illuminate\Http\Request;
+use App\User;
+use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NotificacionfinalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $notificaciones = Notificacionfinal::all();
+        return $this->showAll($notificaciones);
+    }
+    public function indexu(Request $request,Notificacionfinal $Notificacionfinal)
+    {
+        
+        $notificaciones = Notificacionfinal::findOrFail($request->id);
+
+        return $this->successResponse($notificaciones,200);
+    }
+   
+    public function create(Request $request)
+    {
+        $reglas = [
+            'id_evento' =>'required|exists:eventos,id',
+            'texto' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $notificaciones = new Notificacionfinal([
+            'id_evento'    => $request->id_evento,
+            'texto'    => $request->texto,
+        ]);
+
+        $notificaciones->save();
+        return $this->successResponse('Registro exitoso',401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+   
+
+    public function update(Request $request, Notificacionfinal $Notificacionfinal)
     {
-        //
+        $notificaciones = Notificacionfinal::findOrFail($request->id);
+        $reglas = [
+            'id' =>'required',
+            'id_evento' =>'required|exists:eventos,id',
+            'texto' =>'required'
+        ];
+        $this->validate($request, $reglas);
+
+        $notificaciones->id_evento = $request->id_evento;
+        $notificaciones->texto = $request->texto;
+        $notificaciones->save();
+
+        return $this->successResponse($notificaciones,200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+    public function destroy(Request $request,Notificacionfinal $Notificacionfinal)
     {
-        //
-    }
+        $notificaciones = Notificacionfinal::findOrFail($request->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Notificacionfinal  $notificacionfinal
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Notificacionfinal $notificacionfinal)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Notificacionfinal  $notificacionfinal
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Notificacionfinal $notificacionfinal)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Notificacionfinal  $notificacionfinal
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Notificacionfinal $notificacionfinal)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Notificacionfinal  $notificacionfinal
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Notificacionfinal $notificacionfinal)
-    {
-        //
+        $notificaciones->delete();
+        return $this->successResponse($notificaciones,200);
     }
 }

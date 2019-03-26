@@ -94,6 +94,12 @@ Route::group(['prefix' => 'tipos'], function () {
         Route::PUT('tipospqrupdate', 'TipopqrController@update');
         Route::DELETE('tipospqrdelete', 'TipopqrController@destroy');
 
+        Route::get('pqr', 'PqrController@index');
+        Route::get('pqr/{id}', 'PqrController@indexu');
+        Route::post('pqrcreate', 'PqrController@create');
+        Route::PUT('pqrupdate', 'PqrController@update');
+        Route::DELETE('pqrdelete', 'PqrController@destroy');
+
 
       
     });
@@ -133,6 +139,20 @@ Route::group(['prefix' => 'ev'], function () {
         Route::PUT('eventosupdate', 'EventoController@update');
         Route::PUT('eventoscounts', 'EventoController@updatecontadores');
         Route::DELETE('eventosdelete', 'EventoController@destroy');
+
+        Route::get('elugar', 'EventolugarController@index');
+        Route::get('elugar/{id}', 'EventolugarController@indexu');
+        Route::post('elugarcreate', 'EventolugarController@create');
+        Route::PUT('elugarupdate', 'EventolugarController@update');
+        Route::PUT('elugarcounts', 'EventolugarController@updatecontadores');
+        Route::DELETE('elugardelete', 'EventolugarController@destroy');
+
+        Route::get('notificacion', 'NotificacionfinalController@index');
+        Route::get('notificacion/{id}', 'NotificacionfinalController@indexu');
+        Route::post('notificacioncreate', 'NotificacionfinalController@create');
+        Route::PUT('notificacionupdate', 'NotificacionfinalController@update');
+        Route::PUT('notificacioncounts', 'NotificacionfinalController@updatecontadores');
+        Route::DELETE('notificaciondelete', 'NotificacionfinalController@destroy');
 
         Route::get('app', 'EventoappController@index');
         Route::get('app/{id}', 'EventoappController@indexu');
@@ -273,6 +293,11 @@ Route::group(['prefix' => 'setting'], function () {
         Route::PUT('diasupdate', 'DiaController@update');
         Route::DELETE('diasdelete', 'DiaController@destroy');
       
+        Route::get('config', 'ConfiguracionController@index');
+        Route::get('config/{id}', 'ConfiguracionController@indexu');
+        Route::post('configcreate', 'ConfiguracionController@create');
+        Route::PUT('configupdate', 'ConfiguracionController@update');
+        Route::DELETE('configdelete', 'ConfiguracionController@destroy');
     });
 });
 
@@ -291,6 +316,13 @@ Route::group(['prefix' => 'lang'], function () {
         Route::post('traductorcreate', 'TraductorController@create');
         Route::PUT('traductorupdate', 'TraductorController@update');
         Route::DELETE('traductordelete', 'TraductorController@destroy');
+
+
+        Route::get('itraductor', 'IdiomasusuarioController@index');
+        Route::get('itraductor/{id}', 'IdiomasusuarioController@indexu');
+        Route::post('itraductorcreate', 'IdiomasusuarioController@create');
+        Route::PUT('itraductorupdate', 'IdiomasusuarioController@update');
+        Route::DELETE('itraductordelete', 'IdiomasusuarioController@destroy');
       
     });
 });
